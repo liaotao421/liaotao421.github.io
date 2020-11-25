@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>稀疏数组和队列 - TaoBlog</title><meta description="摘要： 稀疏数组和队列"><meta property="og:type" content="article"><meta property="og:title" content="稀疏数组和队列"><meta property="og:url" content="https://liaotao421.github.io/posts/6d016bf8/"><meta property="og:site_name" content="liaotao"><meta property="og:description" content="摘要： 稀疏数组和队列"><meta property="og:locale" content="zh_CN"><meta property="article:published_time" content="2020-08-12T13:43:41.000Z"><meta property="article:modified_time" content="2020-11-25T15:54:40.233Z"><meta property="article:author" content="liaotao"><meta property="article:tag" content="categories-java"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://liaotao421.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://liaotao421.github.io/posts/6d016bf8/"},"headline":"稀疏数组和队列","image":["https://liaotao421.github.io/img/og_image.png"],"datePublished":"2020-08-12T13:43:41.000Z","dateModified":"2020-11-25T15:54:40.233Z","author":{"@type":"Person","name":"liaotao"},"description":"摘要： 稀疏数组和队列"}</script><link rel="alternative" href="/atom.xml" title="TaoBlog" type="application/atom+xml"><link rel="icon" href="https://cdn.jsdelivr.net/gh/removeif/removeif.github.io@latest/img/wico.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro|Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&amp;amp;subset=latin,latin-ext|Inconsolata|Itim|Lobster.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-dark.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css"><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><link rel="stylesheet" href="/css/style.css"><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="/js/globalUtils.js"></script></head><body class="is-3-column has-navbar-fixed-top"><nav class="navbar navbar-main is-fixed-top"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">TaoBlog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/media">影音</a><a class="navbar-item" href="/message">留言</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a><a class="navbar-item" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a></div></div></div></nav><script type="text/javascript" src="/js/theme-setting.js"></script><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-08-12T13:43:41.000Z">2020-08-12</time><a class="commentCountImg" href="/posts/6d016bf8/#comment-container"><span class="display-none-class">3d5b422106e54a34d52e44480e53eab2</span><img class="not-gallery-item" src="/img/chat.svg"> <span class="commentCount" id="3d5b422106e54a34d52e44480e53eab2"> 99+</span>    </a><span class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a><span> / </span><a class="link-muted" href="/categories/%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></span><span class="level-item">11 分钟 读完 (大约 1677 个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">稀疏数组和队列</h1><div class="content"><blockquote>
+<p>摘要：</p>
+<p>稀疏数组和队列</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="稀疏数组和队列"><a href="#稀疏数组和队列" class="headerlink" title="稀疏数组和队列"></a>稀疏数组和队列</h2><h3 id="稀疏数组"><a href="#稀疏数组" class="headerlink" title="稀疏数组"></a>稀疏数组</h3><p>当一个数组大部分元素为0，或者为同一个值时，可以使用稀疏数组来保存该数组 稀疏数组的处理方法是</p>
+<ol>
+<li>第一行记录数组一共有几行几列，有多少个不同的值</li>
+<li>把具有不同值得元素行列以及值记录在另一个小规模的数组中，从而缩小程序的规模</li>
+</ol>
+<h3 id="稀疏数组的应用实例"><a href="#稀疏数组的应用实例" class="headerlink" title="稀疏数组的应用实例"></a>稀疏数组的应用实例</h3><ol>
+<li>使用稀疏数组，来保留二维数组</li>
+<li>稀疏数组转为二维数组</li>
+<li>课后练习:将数据保存到磁盘上，再从磁盘读取</li>
+</ol>
+<p>package com.cyfwlp.sparsearray;</p>
+<p>public class SparseArray {<br>    public static void main(String[] args) {<br>        //创建原始的二维数组<br>        int chessArr1[][] = new int[11][11];<br>        chessArr1[1][2] = 1;<br>        chessArr1[2][3] = 2;<br>        chessArr1[4][5] = 2;<br>        //输出原始的二维数组<br>        System.out.println(“原始的二维数组”);<br>        for (int[] ints : chessArr1) {<br>            for (int anInt : ints) {<br>                System.out.printf(“%d\t”,anInt);<br>            }<br>            System.out.println();<br>        }<br>        //遍历二维数组，得到有效数组个数和坐标<br>        int sum = 0;<br>        for (int[] ints : chessArr1) {<br>            for (int anInt : ints) {<br>                if(anInt != 0){<br>                    sum ++;<br>                }<br>            }<br>        }<br>        //创建对应的稀疏数组<br>        int sparseArr[][] = new int[sum+1][3];<br>        //给稀疏数组赋值<br>        sparseArr[0][0] = 11;<br>        sparseArr[0][1] = 11;<br>        sparseArr[0][2] = sum;<br>        //遍历二维数组，将非零的值存放到稀疏数组中<br>        int count = 0;//用于记录是第几个数据<br>        for (int i = 0; i &lt; 11; i++) {<br>            for (int j = 0; j &lt; 11; j++) {<br>                if (chessArr1[i][j] != 0){<br>                    count ++;<br>                    sparseArr[count][0] = i;<br>                    sparseArr[count][1] = j;<br>                    sparseArr[count][2] = chessArr1[i][j];<br>                }<br>            }<br>        }<br>        //输出稀疏数组<br>        System.out.println(“稀疏数组为”);<br>        for (int[] ints : sparseArr) {<br>            for (int anInt : ints) {<br>                System.out.printf(“%d\t”,anInt);<br>            }<br>            System.out.println();<br>        }</p>
+<pre><code>    //将稀疏数组恢复成原始二维数组
+
+    int chessArr2\[\]\[\] = new int\[sparseArr\[0\]\[0\]\]\[sparseArr\[0\]\[1\]\];
+    for (int i = 1; i &lt; sparseArr.length; i++) {
+        chessArr2\[sparseArr\[i\]\[0\]\]\[sparseArr\[i\]\[1\]\] = sparseArr\[i\]\[2\];
+    }
+
+    System.out.println(&quot;恢复后的二维数组&quot;);
+    for (int\[\] ints : chessArr2) {
+        for (int anInt : ints) {
+            System.out.printf(&quot;%d\\t&quot;,anInt);
+        }
+        System.out.println();
+    }
+}</code></pre><p>}</p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><h5 id="队列介绍"><a href="#队列介绍" class="headerlink" title="队列介绍"></a>队列介绍</h5><ul>
+<li>队列是一个有序列表，可以用数组或链表实现</li>
+<li>遵循先入先出的原则</li>
+</ul>
+<h5 id="数组模拟队列"><a href="#数组模拟队列" class="headerlink" title="数组模拟队列"></a>数组模拟队列</h5><p>需要两个变量real和front记录队头队尾的坐标 代码实现</p>
+<p>package com.cyfwlp.queue;<br>import java.util.Scanner;</p>
+<p>/**<br> * 数组模拟队列<br> */<br>public class ArrayQueueDemo {<br>    public static void main(String[] args) {<br>        //创建队列<br>        ArrayQueue arrayQueue = new ArrayQueue(3);<br>        char key = ‘ ‘;//接受用户输入<br>        Scanner scanner = new Scanner(System.in);<br>        boolean loop = true;<br>        while (loop){<br>            System.out.println(“s(show):显示队列”);<br>            System.out.println(“e(exit):退出程序”);<br>            System.out.println(“a(add):添加数据到队列”);<br>            System.out.println(“g(get):从队头取出数据”);<br>            System.out.println(“h(head):查看队头的数据”);<br>            key = scanner.next().charAt(0);<br>            switch (key){<br>                case ‘s’:<br>                    arrayQueue.showQueue();<br>                    break;<br>                case ‘a’:<br>                    System.out.println(“输入数据”);<br>                    int value = scanner.nextInt();<br>                    arrayQueue.addQueue(value);<br>                    break;<br>                case ‘g’:<br>                    try {<br>                        int result  = arrayQueue.getQueue();<br>                        System.out.println(“取出的数据是 “ + result);<br>                    } catch (Exception e) {<br>                        e.printStackTrace();<br>                    }<br>                    break;<br>                case ‘h’:<br>                    try {<br>                        int head = arrayQueue.headQueue();<br>                        System.out.println(“队头的数据是” + head);<br>                        break;<br>                    } catch (Exception e) {<br>                        e.printStackTrace();<br>                    }<br>                case ‘e’:<br>                    scanner.close();<br>                    loop = false;<br>                    break;<br>            }<br>        }<br>        System.out.println(“程序退出”);<br>    }<br>}</p>
+<p>//编写一个叫ArrayQueue<br>class ArrayQueue{</p>
+<pre><code>private int maxSize;//表示数组的最大容量
+private int front;//队列头
+private int real;//队列尾
+private int\[\] arr;//用于存放数据
+
+//创建队列的构造器
+public ArrayQueue(int maxSize) {
+    this.maxSize = maxSize;
+    arr = new int\[maxSize\];
+    front = -1;//指向队列头的前一个位置
+    real = -1;//指向队列尾的位置
+}
+
+//判断队列是否满
+public boolean isFull(){
+    return real == maxSize -1;
+}
+
+//判断队列是否为空
+public boolean isEmpty(){
+    return real == front;
+}
+
+//添加数据到队列
+public void addQueue(int n){
+    //判断是否满
+    if(isFull()){
+        System.out.println(&quot;队列不能加入数据&quot;);
+        return;
+    }
+    real ++;
+    arr\[real\] = n;
+}
+
+//数据出队列
+public int getQueue(){
+    if(isEmpty()){
+        //通过抛出异常来处理
+        throw new RuntimeException(&quot;队列空，不能取数据&quot;);
+    }
+    front ++;
+    return arr\[front\];
+}
+
+//显示队列的所有数据
+public void showQueue(){
+    if(isEmpty()){
+        System.out.println(&quot;队列为空&quot;);
+        return;
+    }
+    for (int i = 0;i &lt; arr.length;i++) {
+        System.out.printf(&quot;arr\[%d\]=%d\\n&quot;,i,arr\[i\]);
+    }
+}
+
+//显示队列的头数据（不是取出数据）
+public int headQueue(){
+    if(isEmpty()){
+        throw new RuntimeException(&quot;队列为空&quot;);
+    }
+    return arr\[front + 1\];
+}</code></pre><p>}</p>
+<p>问题分析：</p>
+<ol>
+<li>数组使用一次不能用，没有达到复用的效果</li>
+<li>将这个数组改进为环形数组（核心 %）</li>
+</ol>
+<h5 id="数组模拟环形队列"><a href="#数组模拟环形队列" class="headerlink" title="数组模拟环形队列"></a>数组模拟环形队列</h5><p>思路分析</p>
+<ol>
+<li>front变量的含义进行调整：front指向队列的第一个元素，也就是说arr[front]就是队列的第一个元素</li>
+<li>real变量的含义进行调整：real指向队列的最后一个元素的后一个位置，空出一个空间作为约定</li>
+<li>front的初始值=0，real的初始值=0</li>
+<li>当队列满时，条件是 (real + 1) % maxSize = front 【满】</li>
+<li>当队列为空的条件，real = front 【空】</li>
+<li>当我们这样分析后，队列中有效的数据个数 (real + maxSize - front) % maxSize</li>
+<li>就可以在原来的队列上修改，得到一个环形队列</li>
+</ol>
+<p>代码实现</p>
+<p>package com.cyfwlp.queue;<br>import java.util.Scanner;</p>
+<p>/**<br> * 数组模拟环形队列<br> */<br>public class CircleArrayQueueDemo {<br>    public static void main(String[] args) {<br>        //创建队列<br>        CircleArrayQueue arrayQueue = new CircleArrayQueue(4);<br>        char key = ‘ ‘;//接受用户输入<br>        Scanner scanner = new Scanner(System.in);<br>        boolean loop = true;<br>        while (loop){<br>            System.out.println(“s(show):显示队列”);<br>            System.out.println(“e(exit):退出程序”);<br>            System.out.println(“a(add):添加数据到队列”);<br>            System.out.println(“g(get):从队头取出数据”);<br>            System.out.println(“h(head):查看队头的数据”);<br>            key = scanner.next().charAt(0);<br>            switch (key){<br>                case ‘s’:<br>                    arrayQueue.showQueue();<br>                    break;<br>                case ‘a’:<br>                    System.out.println(“输入数据”);<br>                    int value = scanner.nextInt();<br>                    arrayQueue.addQueue(value);<br>                    break;<br>                case ‘g’:<br>                    try {<br>                        int result  = arrayQueue.getQueue();<br>                        System.out.println(“取出的数据是 “ + result);<br>                    } catch (Exception e) {<br>                        e.printStackTrace();<br>                    }<br>                    break;<br>                case ‘h’:<br>                    try {<br>                        int head = arrayQueue.headQueue();<br>                        System.out.println(“队头的数据是” + head);<br>                        break;<br>                    } catch (Exception e) {<br>                        e.printStackTrace();<br>                    }<br>                case ‘e’:<br>                    scanner.close();<br>                    loop = false;<br>                    break;<br>            }<br>        }<br>        System.out.println(“程序退出”);<br>    }<br>}</p>
+<p>//编写一个叫ArrayQueue<br>class CircleArrayQueue{</p>
+<pre><code>private int maxSize;//表示数组的最大容量
+private int front;//队列头
+private int real;//队列尾
+private int\[\] arr;//用于存放数据
+
+//创建队列的构造器
+public CircleArrayQueue(int maxSize) {
+    this.maxSize = maxSize;
+    arr = new int\[maxSize\];
+    front = 0;//指向队列头位置
+    real = 0;//指向队列尾的的前一个位置
+}
+
+//判断队列是否满
+public boolean isFull(){
+    return (real + 1) % maxSize == front;
+}
+
+//判断队列是否为空
+public boolean isEmpty(){
+    return real == front;
+}
+
+//添加数据到队列
+public void addQueue(int n){
+    //判断是否满
+    if(isFull()){
+        System.out.println(&quot;队列不能加入数据&quot;);
+        return;
+    }
+    //直接加入real
+    arr\[real\] = n;
+    //将real指针后移（考虑取模）
+    real  = (real + 1) % maxSize;
+}
+
+//数据出队列
+public int getQueue(){
+    if(isEmpty()){
+        //通过抛出异常来处理
+        throw new RuntimeException(&quot;队列空，不能取数据&quot;);
+    }
+    int value = arr\[front\];
+    front = (front + 1) % maxSize;
+    return value;
+}
+
+//显示队列的所有数据
+public void showQueue(){
+    if(isEmpty()){
+        System.out.println(&quot;队列为空&quot;);
+        return;
+    }
+    //从front开始遍历，遍历\[\]个元素
+    for (int i = front;i &lt; front + size();i ++) {
+        System.out.printf(&quot;arr\[%d\]=%d\\n&quot;,i % maxSize,arr\[i % maxSize\]);
+    }
+}
+
+//求出当前队列有效数组的个数
+public int size(){
+    return (real + maxSize - front) % maxSize;
+}
+
+//显示队列的头数据（不是取出数据）
+public int headQueue(){
+    if(isEmpty()){
+        throw new RuntimeException(&quot;队列为空&quot;);
+    }
+    return arr\[front\];
+}</code></pre><p>}</p>
+</div><ul class="post-copyright"><li><strong>本文标题：</strong><a href="https://liaotao421.github.io/posts/6d016bf8/">稀疏数组和队列</a></li><li><strong>本文作者：</strong><a href="https://liaotao421.github.io">廖涛</a></li><li><strong>本文链接：</strong><a href="https://liaotao421.github.io/posts/6d016bf8/">https://liaotao421.github.io/posts/6d016bf8/</a></li><li><strong>版权声明：</strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li></ul><div class="recommend-post"><span class="is-size-6 has-text-grey has-mr-7"># 推荐文章</span><br><span>  1.<a class="is-size-6" href="/posts/2d9963a8/" target="_blank">二、配置文件</a><br></span><span>  2.<a class="is-size-6" href="/posts/8f610a4b/" target="_blank">github上传自己的项目</a><br></span><span>  3.<a class="is-size-6" href="/posts/eb48756e/" target="_blank">idea插件,设置推荐</a><br></span><span>  4.<a class="is-size-6" href="/posts/7ff872e6/" target="_blank">五、Docker</a><br></span><span>  5.<a class="is-size-6" href="/posts/52c7f62f/" target="_blank">java web 项目中实现短信验证码登录，注册</a><br></span></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/posts/52c7f62f/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">java web 项目中实现短信验证码登录，注册</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/posts/4ca5b461/"><span class="level-item">线性结构和非线性结构</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.6.0/dist/gitalk.css"><script src="/js/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: '3d5b422106e54a34d52e44480e53eab2',
+            repo: 'liaotao421.github.io',
+            owner: 'liaotao421',
+            clientID: '215dbefb9c10c1b96c9c',
+            clientSecret: '2768837277396149ee4de4cb973943112be7f012',
+            admin: ["liaotao421"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 5,
+            pagerDirection: 'last',
+            
+            
+            enableHotKey: true,
+            isLocked: false
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="is-rounded" src="https://s3.ax1x.com/2020/11/25/Dal0xA.jpg" alt="孤独时代的cuber"></figure><p class="title is-size-4 is-block line-height-inherit">孤独时代的cuber</p><p class="is-size-6 is-block">cyfwlp</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>中国 成都</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">50</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">10</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">4</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://weibo.com/6706516056" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/liaotao421"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Weibo" href="https://weibo.com/6706516056"><i class="fab fa-weibo"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Email" href="mailto:121836908@163.com"><i class="fa fa-envelope"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="twitter" href="https://mobile.twitter.com/CSI0KkZDeNlqtkR"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="youtube" href="https://www.youtube.com/channel/UCX2w_4m4yD_PLFP_hsipclQ?view_as=subscriber"><i class="fab fa-youtube"></i></a></div><div><hr><p id="hitokoto">:D 一言句子获取中...</p><script type="text/javascript" defer>function getYiyan(){
+                                $.getJSON("https://v1.hitokoto.cn/", function (data) {
+                                if(data){
+                                    $('#hitokoto').html("");
+                                    $('#hitokoto').append("<strong style='color: #3273dc;'>"+data.hitokoto+"</strong>"+
+                                    "<p>"+"来源《"+data.from+"》</p><p>提供者-"+data.creator+"</p>");
+                                }});}
+                                $(function (){getYiyan();$('#hitokoto').click(function(){getYiyan();})});</script></div></div></div><div class="card widget toc-scroll" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="is-flex" id="toc-item-稀疏数组和队列" href="#稀疏数组和队列"><span>稀疏数组和队列</span></a><ul class="menu-list"><li><a class="is-flex" id="toc-item-稀疏数组" href="#稀疏数组"><span>稀疏数组</span></a></li><li><a class="is-flex" id="toc-item-稀疏数组的应用实例" href="#稀疏数组的应用实例"><span>稀疏数组的应用实例</span></a></li><li><a class="is-flex" id="toc-item-队列" href="#队列"><span>队列</span></a><ul class="menu-list"><li><a class="is-flex" id="toc-item-数组模拟环形队列" href="#数组模拟环形队列"><span>数组模拟环形队列</span></a></li></ul></li></ul></li></ul></div></div><script type="text/javascript" async>
+        $(document).ready(function () { //参考自 https://github.com/ppoffice/hexo-theme-icarus/pull/616/files
+            var observerTopMargin;
+            var scrollObserver;
+            var headerElems = $(".headerlink");
+            var activeTocItem;
+        
+            function initIntersectionObserver(docHeight) {
+                observerTopMargin = docHeight;
+                scrollObserver = new IntersectionObserver(scrollCallBack,
+                    {
+                        root: null,  // viewpoint
+                        rootMargin: docHeight + "px 0px -80% 0px"  // cover top 30% of viewport to the top of document
+                    })
+            }
+        
+            function scrollCallBack(entries, observer) {
+                if ($(window).scrollTop() > observerTopMargin * 0.7) { 
+                    // User somehow scroll to 70% of observerTopMargin (which is inited as 200% document height)
+                    // Observer top margin need to extend to cover all the space to the top of the document
+                    initIntersectionObserver(observerTopMargin * 2)
+                    observer.disconnect();
+                    return;
+                }
+                let toActive;
+                if (entries[0].intersectionRatio == 1) {  // enter viewed area
+                    let entry = entries.reduce((u, v) => (u.target.toc_id > v.target.toc_id ? u : v));  // get the lowest item
+                    toActive = $("#toc-item-" + $(entry.target).attr("href").substr(1));
+                } else {
+                    let entry = entries.reduce((u, v) => (u.target.toc_id < v.target.toc_id ? u : v));  // get the highest item
+                    let idx = Math.max(entry.target.toc_id - 1, 0);
+                    toActive = $("#toc-item-" + $(headerElems[idx]).attr("href").substr(1));
+                }
+                if (activeTocItem) activeTocItem.removeClass("is-current");
+                activeTocItem = toActive
+                activeTocItem.addClass("is-current");
+            }
+        
+            initIntersectionObserver($(document).height() * 2);
+            headerElems.each(function (index, obj) {
+                obj.toc_id = index;
+                scrollObserver.observe(obj);
+            })
+        });</script></div><div class="card widget"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-23T07:28:04.000Z">2020-11-23</time></p><p class="title is-6"><a class="link-muted" href="/posts/5b87471e/">谷粒学院开发day13</a></p><p class="is-uppercase"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a> / <a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/">谷粒学院项目</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-22T07:28:38.000Z">2020-11-22</time></p><p class="title is-6"><a class="link-muted" href="/posts/c5e3d2bd/">谷粒学院开发day14</a></p><p class="is-uppercase"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a> / <a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/">谷粒学院项目</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-17T14:44:45.000Z">2020-11-17</time></p><p class="title is-6"><a class="link-muted" href="/posts/2c807788/">谷粒学院开发day12</a></p><p class="is-uppercase"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a> / <a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/">谷粒学院项目</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-16T11:10:12.000Z">2020-11-16</time></p><p class="title is-6"><a class="link-muted" href="/posts/b5892632/">谷粒学院开发day11</a></p><p class="is-uppercase"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a> / <a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/">谷粒学院项目</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-15T12:11:34.000Z">2020-11-15</time></p><p class="title is-6"><a class="link-muted" href="/posts/c28e16a4/">谷粒学院开发day10</a></p><p class="is-uppercase"><i class="fas fa-folder-open has-text-grey"> </i><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a> / <a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/">谷粒学院项目</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/javaweb/"><span class="level-start"><span class="level-item">javaweb</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/vue/"><span class="level-start"><span class="level-item">vue</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/"><span class="level-start"><span class="level-item">技术分享</span></span><span class="level-end"><span class="level-item tag">15</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E8%B0%B7%E7%B2%92%E5%AD%A6%E9%99%A2%E9%A1%B9%E7%9B%AE/"><span class="level-start"><span class="level-item">谷粒学院项目</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/"><span class="level-start"><span class="level-item">笔记</span></span><span class="level-end"><span class="level-item tag">27</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/springboot/"><span class="level-start"><span class="level-item">springboot</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">数据结构与算法</span></span><span class="level-end"><span class="level-item tag">15</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/%E8%AF%B4%E8%AF%B4/"><span class="level-start"><span class="level-item">说说</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB/"><span class="level-start"><span class="level-item">资源分享</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><a class="level is-mobile is-marginless" href="/categories/"><span class="level-start"><span class="level-item">查看全部&gt;&gt;</span></span></a></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2020/11/"><span class="level-start"><span class="level-item">十一月 2020</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/10/"><span class="level-start"><span class="level-item">十月 2020</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">26</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">八月 2020</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="tag">操作系统</span><span class="tag is-grey-lightest">6</span></a></div><div class="control"><a class="tags has-addons" href="/tags/springboot/"><span class="tag">springboot</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/vue/"><span class="tag">vue</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"><span class="tag">数据结构与算法</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">TaoBlog</a><p class="size-small"><span>&copy; 2020 廖涛</span>  Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>,Modify by <a href="https://github.com/removeif" target="_blank">removeif</a> <br>© 版权说明：[本网站所有内容均收集于互联网或自己创作,<br>    方便于网友与自己学习交流，如有侵权，请<a href="/message" target="_blank">留言</a>，立即处理]<br><script type="text/javascript" src="/js/statistics.js"></script><span id="statistic-times">网站运行时间统计加载中...</span><br></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'https://liaotao421.github.io',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back-to-top.js" defer></script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script src="/js/gallery.js" defer></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('[role="article"] > .content').forEach(function(element) {
+                renderMathInElement(element);
+            });
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            MathJax.Hub.Config({
+                'HTML-CSS': {
+                    matchFontHeight: false
+                },
+                SVG: {
+                    matchFontHeight: false
+                },
+                CommonHTML: {
+                    matchFontHeight: false
+                },
+                tex2jax: {
+                    inlineMath: [
+                        ['$','$'],
+                        ['\\(','\\)']
+                    ]
+                }
+            });
+        });</script><div id="outdated"><h6>Your browser is out-of-date!</h6><p>Update your browser to view this website correctly.&amp;npsb;<a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p><p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">×</a></p></div><script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" async></script><script>document.addEventListener("DOMContentLoaded", function () {
+            outdatedBrowser({
+                bgColor: '#f25648',
+                color: '#ffffff',
+                lowerThan: 'object-fit' // display on IE11 or below
+            });
+        });</script><!--!--><script src="/js/main.js" defer></script><script src="/js/comment-issue-data.js" defer></script><link rel="stylesheet" href="/css/insight.css"><div class="searchbox ins-search"><div class="searchbox-container ins-search-container"><div class="searchbox-input-wrapper"><input class="searchbox-input ins-search-input" type="text" placeholder="想要查找什么..."><span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span></div><div class="searchbox-result-wrapper ins-section-wrapper"><div class="ins-section-container"></div></div></div></div><script>(function (window) {
+            var INSIGHT_CONFIG = {
+                TRANSLATION: {
+                    POSTS: '文章',
+                    PAGES: '页面',
+                    CATEGORIES: '分类',
+                    TAGS: '标签',
+                    UNTITLED: '(无标题)',
+                },
+                CONTENT_URL: '/content.json',
+            };
+            window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+        })(window);</script><script src="/js/insight.js" defer></script></body></html>
