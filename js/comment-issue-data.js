@@ -1,5 +1,5 @@
 // 评论issues仓库 by.removeif https://removeif.github.io/
-var repoIssuesUrl = "https://github.com/liaotao421/liaotao421.github.io/issues";
+var repoIssuesUrl = "https://api.github.com/repos/liaotao421/liaotao421.github.io/issues";
 // 对应仓库 clientId、clientSecret 关于这两个参数的安全问题，查看 https://removeif.github.io/2019/09/19/博客源码分享.html#1-热门推荐，最新评论：
 var clientId = "966837d7c763617cda0d";
 var clientSecret = "637d4169f4ae86b16d6c6c3e14f4173054b34187";
@@ -241,9 +241,7 @@ $(document).ready(setTimeout(function () { // 延迟1s执行，保证其余的�
         }
 
         console.clear();
-        console.log("~~~~xiu xiu xiu 欢迎光临~~~");
-        console.log("~~~~唉，控制台太多报错了，呜呜呜呜~~~");
-        console.log("~~~~记得有时间多来看看哦，https://removeif.github.io/")
+        console.log("~~~~唉，控制台太多报错了");
     }
     ,
     500
